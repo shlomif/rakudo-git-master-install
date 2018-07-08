@@ -23,7 +23,7 @@
 # SOFTWARE.
 
 set -x
-rak_p="$HOME/apps/perl6-rakudo"
+rak_p="${RAKUDO_GIT_INSTALL_BASE:-$HOME/apps/perl6-rakudo}"
 export PATH="$rak_p/bin:$PATH"
 export PKG_CONFIG_PATH="$rak_p/lib/pkgconfig"
 
@@ -56,6 +56,6 @@ rak_git_build()
     ( cd "$git_co" && git checkout "$branch" && ($tag || git pull origin "$branch") && perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix="$prefix" && make && _check && make install ) || { echo failed ; exit -1 ; }
 }
 
-rak_git_build "$HOME/Download/unpack/perl/p6/rakudo-git-master/rakudo" https://github.com/rakudo/rakudo "$rak_p"
+rak_git_build "${RAKUDO_GIT_SRC_BASE:-$HOME/Download/unpack/perl/p6/rakudo-git-master/rakudo}" https://github.com/rakudo/rakudo "$rak_p"
 
 printf '\n== Success ==\n\n'
