@@ -58,4 +58,6 @@ rak_git_build()
 
 rak_git_build "${RAKUDO_GIT_SRC_BASE:-$HOME/Download/unpack/perl/p6/rakudo-git-master/rakudo}" https://github.com/rakudo/rakudo "$rak_p"
 
+(export PATH="$rak_p/bin:$PATH";
+    git clone https://github.com/ugexe/zef.git && cd zef && perl6 -I. bin/zef install .)
 printf '\n== Success ==\n\n'
