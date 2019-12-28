@@ -29,7 +29,8 @@ export PKG_CONFIG_PATH="$rak_p/lib/pkgconfig"
 
 _check()
 {
-    if test -n "$SKIP_CHECK" ; then
+    if test -n "$SKIP_CHECK"
+    then
         true
     else
         make test
@@ -49,15 +50,31 @@ rak_git_build()
     local tag="${1:-false}"
     shift
 
-    if ! test -e "$git_co" ; then
+    if ! test -e "$git_co"
+    then
         mkdir -p "$(dirname "$git_co")"
         git clone "$url" "$git_co"
     fi
-    ( cd "$git_co" && git checkout "$branch" && ($tag || git pull origin "$branch") && perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix="$prefix" && make && _check && make install ) || { echo failed ; exit -1 ; }
+    (
+        cd "$git_co" && \
+            git checkout "$branch" && \
+            ($tag || git pull origin "$branch") && \
+            perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix="$prefix" && \
+            make && \
+            _check && \
+            make install
+    ) || { echo failed ; exit -1 ; }
 }
 
 rak_git_build "${RAKUDO_GIT_SRC_BASE:-$HOME/Download/unpack/perl/p6/rakudo-git-master/rakudo}" https://github.com/rakudo/rakudo "$rak_p"
 
-(export PATH="$rak_p/bin:$PATH";
-    if ! test -d zef ; then git clone https://github.com/ugexe/zef.git ; fi && cd zef && perl6 -I. bin/zef install .)
+(
+    export PATH="$rak_p/bin:$PATH"
+    if ! test -d zef
+    then
+        git clone https://github.com/ugexe/zef.git
+    fi && \
+    cd zef && \
+    perl6 -I. bin/zef install .
+)
 printf '\n== Success ==\n\n'
